@@ -125,8 +125,18 @@ def risk(text):
             counter[0] = counter[0] + 1 
         elif spam_detection(word)==0 : 
             counter[1] = counter[1] + 1   
-    medium = round(counter[0]/len(text_v) * 10,3 )
-    return medium   
+    medium = round(counter[0]/len(text_v) * 10,2 )
+    return medium
+def d_risk(text):
+    counter = [0,0] 
+    text_v=text.split()
+    for word in text_v:
+        if d_prediction(word)==1:
+            counter[0] = counter[0] + 1 
+        elif d_prediction(word)==0 : 
+            counter[1] = counter[1] + 1   
+    medium = round(counter[0]/len(text_v) * 10,2 )
+    return medium    
         
 words_to_remove = ['for', 'as', 'to', 'with','is']
 def highlight_spam_words(text):
@@ -146,8 +156,11 @@ def highlight_spam_words(text):
     return highlighted_text.strip()
 
 # c'est un scan avancé des motes de l'email
-def advanced(text):
-    score = risk(text)
+def advanced(text,id):
+    if id == 0:
+     score = risk(text)
+    else:
+        score = d_risk(text) 
                   
     if extract_links(text)==None:
         st.write("no links...")
@@ -269,14 +282,14 @@ def main():
                 st.warning("The text is classified as spam.")
             elif prediction == 0:
                 st.success("The text is not classified as spam.")
-                advanced(his_email)
+                advanced(his_email,0)
         if st.button("scan with deep learning model 🛸"):
             prediction = d_prediction(his_email)
             if prediction == 1:
                 st.warning("The text is classified as spam.")
             elif prediction == 0:
                 st.success("The text is not classified as spam.")
-                advanced(his_email)
+                advanced(his_email,1)
 
             
 
@@ -385,7 +398,7 @@ def main():
                 st.success("The extracted text is not classified as spam.")
                 with st.spinner("Running advanced scanning..."):
                  
-                 advanced(extracted_text)
+                 advanced(extracted_text,0)
                  variable_dict["safe_emails"]+=1
                  write_variables_to_file(file_path, variable_dict)   
         if st.button("process image with deep machine learning model 🛸"):
@@ -406,7 +419,7 @@ def main():
                 st.success("The extracted text is not classified as spam.")
                 with st.spinner("Running advanced scanning..."):
                  
-                 advanced(extracted_text)
+                 advanced(extracted_text,1)
                  variable_dict["safe_emails"]+=1
                  write_variables_to_file(file_path, variable_dict)   
 
