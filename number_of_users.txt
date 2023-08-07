@@ -1,0 +1,3 @@
+number_of_uses = 50
+detection_times = 17
+safe_emails = 33
