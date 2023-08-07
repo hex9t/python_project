@@ -127,18 +127,24 @@ def risk(text):
     medium = round(counter[0]/len(text_v) * 10,1 )
     return medium   
         
-
+        
+words_to_remove = ['for', 'as', 'to', 'with','is']
 def highlight_spam_words(text):
     words = text.split()
     highlighted_text = ""
 
     for word in words:
-        if spam_detection(word):
-            highlighted_text += f'<span style="color:red">{word}</span> '
-        else:
+        if word in words_to_remove:
             highlighted_text += f"{word} "
+        else:    
+
+            if spam_detection(word):
+                highlighted_text += f'<span style="color:red">{word}</span> '
+            else:
+                highlighted_text += f"{word} "
 
     return highlighted_text.strip()
+
 
 # c'est un scan avancé des motes de l'email
 def advanced(text):
