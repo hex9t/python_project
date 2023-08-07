@@ -125,7 +125,7 @@ def risk(text):
             counter[0] = counter[0] + 1 
         elif spam_detection(word)==0 : 
             counter[1] = counter[1] + 1   
-    medium = round(counter[0]/len(text_v) * 10,2 )
+    medium = round(counter[0]/len(text_v) * 10,3 )
     return medium   
         
 words_to_remove = ['for', 'as', 'to', 'with','is']
