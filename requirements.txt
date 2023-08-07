@@ -5,3 +5,4 @@ streamlit_lottie == 0.0.5
 matplotlib == 3.7.2
 seaborn == 0.12.2
 tensorflow == 2.13.0
+plotly == 5.15.0
