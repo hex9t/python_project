@@ -241,14 +241,14 @@ def design():
      safe_emails_percentage = (data['safe_emails'] / data['number_of_uses']) * 100
 
     # Create and display pie chart using Plotly
-    fig = px.pie(
-        values=[detection_times_percentage, safe_emails_percentage],
-        names=["Spam Emails", "Safe Emails"],
-        title="Spam Detection Percentage",
-    )
-    fig.update_traces(textinfo='percent+label')
+     fig = px.pie(
+         values=[detection_times_percentage, safe_emails_percentage],
+         names=["Spam Emails", "Safe Emails"],
+         title="Spam Detection Percentage",
+     )
+     fig.update_traces(textinfo='percent+label')
     
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     st.write(st.session_state.number_of_users)
 
 
