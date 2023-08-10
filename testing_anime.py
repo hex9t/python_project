@@ -23,11 +23,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import plotly.express as px
 
 if "number_of_users" not in st.session_state:
-    st.session_state["number_of_users"] = 50
+    st.session_state["number_of_users"] = 0
 if "number_of_safe_emails" not in st.session_state:
-    st.session_state["number_of_safe_emails"] = 30
+    st.session_state["number_of_safe_emails"] = 0
 if "number_of_spam_emails" not in st.session_state:
-    st.session_state["number_of_spam_emails"] = 20       
+    st.session_state["number_of_spam_emails"] = 0       
 
 d_model = tf.keras.models.load_model('deep_learning_model.h5')
 with open('d_tokenizer.pickle', 'rb') as handle:
