@@ -23,7 +23,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import plotly.express as px
 
 if "number_of_users" not in st.session_state:
-    st.session_state["number_of_users"] = 0
+    st.session_state["number_of_users"] = 1
 if "number_of_safe_emails" not in st.session_state:
     st.session_state["number_of_safe_emails"] = 0
 if "number_of_spam_emails" not in st.session_state:
