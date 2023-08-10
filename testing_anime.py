@@ -23,7 +23,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 import plotly.express as px
 
 if "number_of_users" not in st.session_state:
-    st.session_state["number_of_users"] = 1
+    st.session_state["number_of_users"] = 0
 if "number_of_safe_emails" not in st.session_state:
     st.session_state["number_of_safe_emails"] = 0
 if "number_of_spam_emails" not in st.session_state:
@@ -236,9 +236,9 @@ def design():
             st.metric(label="Spam Detections", value=data['detection_times'], delta="New Detections")
         with col3:
             st.metric(label="Safe Emails", value=data['safe_emails'], delta="New Safe Emails")
-    
-    detection_times_percentage = (data['detection_times'] / data['number_of_uses']) * 100
-    safe_emails_percentage = (data['safe_emails'] / data['number_of_uses']) * 100
+    if data['number_of_uses']!=0: 
+     detection_times_percentage = (data['detection_times'] / data['number_of_uses']) * 100
+     safe_emails_percentage = (data['safe_emails'] / data['number_of_uses']) * 100
 
     # Create and display pie chart using Plotly
     fig = px.pie(
