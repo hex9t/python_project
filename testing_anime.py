@@ -22,7 +22,12 @@ import pickle
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import plotly.express as px
 
-
+if "number_of_users" not in st.session_state:
+    st.session_state["number_of_users"] = 50
+if "number_of_safe_emails" not in st.session_state:
+    st.session_state["number_of_safe_emails"] = 30
+if "number_of_spam_emails" not in st.session_state:
+    st.session_state["number_of_spam_emails"] = 20       
 
 d_model = tf.keras.models.load_model('deep_learning_model.h5')
 with open('d_tokenizer.pickle', 'rb') as handle:
@@ -217,6 +222,11 @@ def design():
         
         file_path = 'number_of_users.txt'
         data = read_variables_from_file(file_path)
+        data = dict()
+        data["number_of_uses"] = st.session_state.number_of_users
+        data["detection_times"] = st.session_state.number_of_spam_emails
+        data["safe_emails"] = st.session_state.number_of_safe_emails
+        
         
         col1, col2, col3 = st.columns(3)
         
@@ -239,6 +249,9 @@ def design():
     fig.update_traces(textinfo='percent+label')
     
     st.plotly_chart(fig, use_container_width=True)
+    st.write(st.session_state.number_of_users)
+
+
 def extract_text_from_image(image):
  
     image = image.convert("L")
@@ -250,8 +263,7 @@ def extract_text_from_image(image):
     return text
 
 def main():
-    file_path = 'number_of_users.txt'
-    variable_dict = read_variables_from_file(file_path)
+    
     st.set_page_config(page_title="spam filter", page_icon=":gear:")
   
 
@@ -278,18 +290,24 @@ def main():
         
   
             prediction = spam_detection(his_email)
+            st.session_state.number_of_users +=1
             if prediction == 1:
                 st.warning("The text is classified as spam.")
+                st.session_state.number_of_spam_emails+=1
             elif prediction == 0:
                 st.success("The text is not classified as spam.")
                 advanced(his_email,0)
+                st.session_state.number_of_safe_emails+=1
         if st.button("scan with deep learning model 🛸"):
             prediction = d_prediction(his_email)
+            st.session_state.number_of_users +=1
             if prediction == 1:
                 st.warning("The text is classified as spam.")
+                st.session_state.number_of_spam_emails+=1
             elif prediction == 0:
                 st.success("The text is not classified as spam.")
                 advanced(his_email,1)
+                st.session_state.number_of_safe_emails+=1
 
             
 
@@ -311,6 +329,7 @@ def main():
         imap_server = 'imap.gmail.com'
 
         if st.button("Analyze Gmail Inbox"):
+            st.session_state.number_of_users +=1
             
 
             last_email_uid = get_last_email_uid(imap_server, username, password)
@@ -321,11 +340,13 @@ def main():
                 
                 prediction = spam_detection(input)
                 if prediction == 1:
+                    st.session_state.number_of_spam_emails+=1
                     st.error("The email is classified as spam.")
                     st.warning("The email has been deleted from your inbox.")
                     delete_email_by_uid(imap_server, username, password, last_email_uid)
                 else:
                     st.success("The email is not classified as spam.")
+                    st.session_state.number_of_safe_emails+=1
                     advanced(input)
             else:
                 st.error("No emails found in the mailbox.")
@@ -381,8 +402,7 @@ def main():
         uploaded_image = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
         if st.button("Process Image with machine learning model 🤖") and uploaded_image is not None:
-            variable_dict["number_of_uses"] +=1
-            write_variables_to_file(file_path, variable_dict)
+            st.session_state.number_of_users +=1
             image = Image.open(uploaded_image)
             extracted_text = extract_text_from_image(image)
 
@@ -391,19 +411,17 @@ def main():
 
             if prediction == 1:
                 st.warning("The extracted text is classified as spam.")
-                variable_dict["detection_times"]+=1
-                write_variables_to_file(file_path, variable_dict)
+                st.session_state.number_of_spam_emails+=1
+                
                 
             elif prediction == 0:
                 st.success("The extracted text is not classified as spam.")
                 with st.spinner("Running advanced scanning..."):
                  
                  advanced(extracted_text,0)
-                 variable_dict["safe_emails"]+=1
-                 write_variables_to_file(file_path, variable_dict)   
+                 st.session_state.number_of_safe_emails+=1
         if st.button("process image with deep machine learning model 🛸"):
-            variable_dict["number_of_uses"] +=1
-            write_variables_to_file(file_path, variable_dict)
+            st.session_state.number_of_users +=1
             image = Image.open(uploaded_image)
             extracted_text = extract_text_from_image(image)
 
@@ -412,16 +430,16 @@ def main():
 
             if prediction == 1:
                 st.warning("The extracted text is classified as spam.")
-                variable_dict["detection_times"]+=1
-                write_variables_to_file(file_path, variable_dict)
+                st.session_state.number_of_spam_emails+=1
+                
                 
             elif prediction == 0:
                 st.success("The extracted text is not classified as spam.")
                 with st.spinner("Running advanced scanning..."):
+                 st.session_state.number_of_safe_emails+=1
                  
                  advanced(extracted_text,1)
-                 variable_dict["safe_emails"]+=1
-                 write_variables_to_file(file_path, variable_dict)   
+                  
 
                     
 
